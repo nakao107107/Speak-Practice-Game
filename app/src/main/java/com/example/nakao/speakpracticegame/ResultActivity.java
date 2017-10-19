@@ -1,6 +1,8 @@
 package com.example.nakao.speakpracticegame;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,16 +11,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+
 /**
  * Created by nakao on 2017/06/15.
  */
 
-public class ResultActivity extends AppCompatActivity {
+public class ResultActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView RightAnswer,Comment;
     Intent intent;
     int Result;
-    Button goHomeButton;
+    int ProgramNumber;
+    double Percentage;
+    Button goHomeButton,goGameButton;
+    ImageView image;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,34 +36,57 @@ public class ResultActivity extends AppCompatActivity {
         intent=getIntent();
         Result=intent.getIntExtra("RightAnswerNumber",0);
 
+        //Preferenceファイルから問題数を取得（設定なしの場合10問）
+        SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
+        ProgramNumber = data.getInt("ProgramNumber",10 );
+
+        Percentage=Result/ProgramNumber;
+
         RightAnswer=(TextView)findViewById(R.id.result);
-        RightAnswer.setText(Result+"/10");
+        RightAnswer.setText(Result+"/"+ProgramNumber);
 
         Comment=(TextView)findViewById(R.id.comment);
 
         goHomeButton=(Button)findViewById(R.id.goHomeButton);
+        goGameButton=(Button)findViewById(R.id.goGameButton);
+
+        goGameButton.setOnClickListener(this);
+        goHomeButton.setOnClickListener(this);
+
+        image=(ImageView)findViewById(R.id.judge);
 
 
 
-        if(Result==10){
+
+        if(Percentage==1.0){
             Comment.setText("やったね！パーフェクト！");
-            ((ImageView) findViewById(R.id.judge)).setImageResource(R.drawable.bird4);
-        }else if(Result>6){
+            GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+            Glide.with(this).load(R.drawable.happy).into(target);
+        }else if(Result>0.6){
             Comment.setText("いいかんじ！つぎはまんてんをめざそう！");
-            ((ImageView) findViewById(R.id.judge)).setImageResource(R.drawable.bird1);
+            GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+            Glide.with(this).load(R.drawable.ordinary).into(target);
         }else{
             Comment.setText("ざんねん…つぎはもっとがんばろう…");
-            ((ImageView) findViewById(R.id.judge)).setImageResource(R.drawable.bird3);
+            GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+            Glide.with(this).load(R.drawable.sad).into(target);
         }
 
-        goHomeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(v.getContext(),MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.goHomeButton:
+                Intent intent1=new Intent(v.getContext(),MainActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.goGameButton:
+                Intent intent2=new Intent(v.getContext(),GameActivity.class);
+                startActivity(intent2);
+                break;
+        }
     }
 }

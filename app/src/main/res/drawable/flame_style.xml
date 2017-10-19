@@ -3,8 +3,10 @@
     android:shape="rectangle">
 
     <!-- 枠線 width:線の幅、color:線の色 -->
+
+    <solid android:color="@color/white"/>
     <stroke
         android:width="4dp"
-        android:color="#00ff41" />
+        android:color="@color/lightblue1" />
 
 </shape>
