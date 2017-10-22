@@ -84,7 +84,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(intent1);
                 break;
             case R.id.goGameButton:
-                Intent intent2=new Intent(v.getContext(),GameActivity.class);
+                Intent intent2=new Intent(v.getContext(),StageSelectActivity.class);
                 startActivity(intent2);
                 break;
         }

@@ -5,7 +5,6 @@ import android.util.Log;
 import org.atilika.kuromoji.Token;
 import org.atilika.kuromoji.Tokenizer;
 
-import java.util.List;
 
 /**
  * Created by nakao on 2017/10/17.
@@ -14,13 +13,19 @@ import java.util.List;
 public class TokenizerUtil {
 
     public static String getKatakana(String word) {
-        Tokenizer.Builder builder = Tokenizer.builder();
-        builder.mode(Tokenizer.Mode.NORMAL);
-        Tokenizer tokenizer = builder.build();
-        Token tokens = tokenizer.tokenize(word);
-        StringBuilder sb = new StringBuilder();
-        for (Token token : tokens)
-            sb.append(token.getReading());
-        return "こんにちは";
+
+        Tokenizer mTokenizer;
+        mTokenizer= new Tokenizer.Builder().build();
+        StringBuilder sb=new StringBuilder();
+
+
+        for (Token token : mTokenizer.tokenize("私の名前はなかおです")) {
+
+            String feature=token.getAllFeatures();
+            Log.d("getAllFeatureArrayの長さ", feature);
+            
+            sb.append(feature);
+        }
+        return sb.toString();
     }
 }

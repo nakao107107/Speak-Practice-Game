@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="もういちどチャレンジ！"
+        android:text="レベルをえらんでもう１どチャレンジ"
         android:id="@+id/goGameButton"
         android:background="@drawable/button_state"
         android:textColor="@color/white"

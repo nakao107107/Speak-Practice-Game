@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -27,8 +28,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
-import org.atilika.kuromoji.Token;
-import org.atilika.kuromoji.Tokenizer;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -250,13 +249,19 @@ public class GameActivity extends AppCompatActivity {
             ArrayList results_array = results.getStringArrayList(
                     SpeechRecognizer.RESULTS_RECOGNITION);
 
+            //Test:全体の結果を表示
+            Log.d("認識結果",results_array.toString());
+
+            //取得したArrayListに正解と同じ文字列が含まれているかを検証
+            boolean judge=new ArrayUtil().judgeArray(RealAnswer,results_array);
+
             //１番可能性の高いものを取得
             String resultsString =(String)(results_array.get(0));
 
             //kuromojiにかけてカタカナ変換
-            resultsString=tokenizerUtil.getKatakana(resultsString);
+            //resultsString=tokenizerUtil.getKatakana(resultsString);
 
-            if(RealAnswer.equals(resultsString)){
+            if(judge){
                 Judge.setText("せいかい！");
                 GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
                 Glide.with(getApplicationContext()).load(R.drawable.happy).into(target);
