@@ -33,27 +33,36 @@ public class ArrayUtil {
 
     }
 
+    /**
+     * 渡された言葉に対し、正しければ判定配列の該当ぶを+1,間違っていれば-1して返す。
+     * @param right_word 正解の言葉
+     * @param sample_word　判定する言葉
+     * @param eval_array　判定配列
+     * @return　判定配列
+     */
     public static int[] correctWord(String right_word, String sample_word,@Nullable int[] eval_array) {
+        int[] jarray;
         if(eval_array == null){
-            int[] jarray = new int[50];
+            jarray = new int[50];
+        } else {
+            jarray =  eval_array;
         }
-        int[] jarray = eval_array;
         Arrays.fill(jarray,0);
         int p = 0;
 
-        char[] rascii = right_word.toCharArray();
-        char[] sascii = sample_word.toCharArray();
+        char[] r_chars = right_word.toCharArray();
+        char[] s_chars = sample_word.toCharArray();
 
         int i=0;
-        while (i<rascii.length && i<sascii.length){
-            p= GOJUON.indexOf(rascii[i]) ;
+        while (i<r_chars.length && i<s_chars.length){
+            p= GOJUON.indexOf(r_chars[i]) ;
             Log.d("TAG",String.valueOf(p));
             if(p<0 || p>50) {
                 i++;
                 continue;
             }
 
-            if(rascii[i] == sascii[i]){
+            if(r_chars[i] == s_chars[i]){
                 jarray[p] += 1;
             } else {
                 jarray[p] -= 1;
