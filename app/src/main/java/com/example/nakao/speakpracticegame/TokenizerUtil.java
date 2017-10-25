@@ -2,8 +2,8 @@ package com.example.nakao.speakpracticegame;
 
 import android.util.Log;
 
-import org.atilika.kuromoji.Token;
-import org.atilika.kuromoji.Tokenizer;
+import com.atilika.kuromoji.ipadic.Token;
+import com.atilika.kuromoji.ipadic.Tokenizer;
 
 
 /**
@@ -19,9 +19,9 @@ public class TokenizerUtil {
         StringBuilder sb=new StringBuilder();
 
 
-        for (Token token : mTokenizer.tokenize("私の名前はなかおです")) {
+        for (Token token : mTokenizer.tokenize(word)) {
 
-            String feature=token.getAllFeatures();
+            String feature=token.getReading();
             Log.d("getAllFeatureArrayの長さ", feature);
             
             sb.append(feature);

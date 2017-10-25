@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -53,6 +54,10 @@ public class GameActivity extends AppCompatActivity {
     static int ProgramNumber;//問題数格納用
 
     TokenizerUtil tokenizerUtil;
+
+    String resultstring;
+
+    Handler handler=new Handler();
 
 
 
@@ -249,37 +254,69 @@ public class GameActivity extends AppCompatActivity {
             ArrayList results_array = results.getStringArrayList(
                     SpeechRecognizer.RESULTS_RECOGNITION);
 
-            //Test:全体の結果を表示
-            Log.d("認識結果",results_array.toString());
-
-            //取得したArrayListに正解と同じ文字列が含まれているかを検証
-            boolean judge=new ArrayUtil().judgeArray(RealAnswer,results_array);
-
             //１番可能性の高いものを取得
-            String resultsString =(String)(results_array.get(0));
+            resultstring =(String)(results_array.get(0));
 
-            //kuromojiにかけてカタカナ変換
-            //resultsString=tokenizerUtil.getKatakana(resultsString);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //kuromojiにかけてカタカナ変換
+                    resultstring=tokenizerUtil.getKatakana(resultstring);
+                    Log.d("進捗","kuromojiの処理が完了しました");
 
-            if(judge){
-                Judge.setText("せいかい！");
-                GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
-                Glide.with(getApplicationContext()).load(R.drawable.happy).into(target);
-                RightAnswerNumber++;
-                button.setText("つぎのもんだいにチャレンジ");
-                button.setEnabled(true);
-            }else{
-                Judge.setText("ざんねん…"+resultsString+"ってきこえたよ");
-                GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
-                Glide.with(getApplicationContext()).load(R.drawable.sad).into(target);
-                button.setText("つぎのもんだいにチャレンジ");
-                button.setEnabled(true);
-            }
+                    //ひらがなに変換
+                    resultstring=new HiraganaKatakanaMatch().zenkakuHiraganaToZenkakuKatakana(resultstring);
 
-            if(Times==ProgramNumber+1){
-                button.setText("けっかはっぴょうへすすむ");
-                button.setEnabled(true);
-            }
+                    if(RealAnswer.equals(resultstring)){
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Judge.setText("せいかい！");
+                                GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+                                Glide.with(getApplicationContext()).load(R.drawable.happy).into(target);
+                                RightAnswerNumber++;
+                                button.setText("つぎのもんだいにチャレンジ");
+                                button.setEnabled(true);
+
+                            }
+                        });
+
+                    }else{
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Judge.setText("ざんねん…「"+resultstring+"」ってきこえたよ");
+                                GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+                                Glide.with(getApplicationContext()).load(R.drawable.sad).into(target);
+                                button.setText("つぎのもんだいにチャレンジ");
+                                button.setEnabled(true);
+
+                            }
+                        });
+
+                    }
+
+                    if(Times==ProgramNumber+1){
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                button.setText("けっかはっぴょうへすすむ");
+                                button.setEnabled(true);
+
+                            }
+                        });
+
+                    }
+
+
+                }
+            }).start();
+
+
 
 
         }
