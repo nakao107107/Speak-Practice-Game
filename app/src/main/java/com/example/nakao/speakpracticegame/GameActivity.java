@@ -1,8 +1,10 @@
 package com.example.nakao.speakpracticegame;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,15 +15,21 @@ import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +50,7 @@ public class GameActivity extends AppCompatActivity {
     Button button;
     TextView Judge,Question,Time;
     ImageView image;
+    LinearLayout mGroundView;
 
     String RealAnswer;
 
@@ -58,6 +67,9 @@ public class GameActivity extends AppCompatActivity {
     String resultstring;
 
     Handler handler=new Handler();
+
+    //パーミッション用の数字。何でも良い
+    int REQUEST_PERMISSION = 100;
 
 
 
@@ -110,6 +122,7 @@ public class GameActivity extends AppCompatActivity {
         Question=(TextView)findViewById(R.id.question);
         Time=(TextView)findViewById(R.id.Times);
         image = (ImageView) findViewById(R.id.character);
+        mGroundView = (LinearLayout) findViewById(R.id.background);
         GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
         Glide.with(this).load(R.drawable.ordinary).into(target);
 
@@ -144,7 +157,7 @@ public class GameActivity extends AppCompatActivity {
                     RealAnswer=Array[level][Rand];
                     Question.setText(RealAnswer);
 
-                    startListening();
+                    startAudioRecordingSafe();
                     Times++;
                 }
             }
@@ -321,5 +334,45 @@ public class GameActivity extends AppCompatActivity {
 
         }
     }
+
+    private void startAudioRecordingSafe() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED) {
+            startListening();
+        } else {
+            requestMicrophonePermission();
+        }
+    }
+
+    private void requestMicrophonePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO) && ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+            Snackbar.make(mGroundView, "Microphone access is required in order to record audio",
+                    Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityCompat.requestPermissions(GameActivity.this, new String[]{
+                            Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS}, REQUEST_PERMISSION);
+                }
+
+            }).show();
+
+        } else {
+            ActivityCompat.requestPermissions(GameActivity.this, new String[]{
+                            Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS},
+                    REQUEST_PERMISSION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSION && grantResults.length > 0 &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startListening();
+        }
+
+    }
+
+
 
 }
