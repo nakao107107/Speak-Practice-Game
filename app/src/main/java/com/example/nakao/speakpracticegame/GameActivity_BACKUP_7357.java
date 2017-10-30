@@ -48,10 +48,16 @@ public class GameActivity extends AppCompatActivity {
 
     private SpeechRecognizer sr;
 
+<<<<<<< HEAD
+    Button button;
+    TextView Judge,Question,Time;
+    ImageView image;
+    LinearLayout mGroundView;
+=======
     private Button mButton;
     private TextView mJudgeText,mQuestionText,mTimeText;
     private ImageView mImageView;
-
+>>>>>>> score_count
 
     private String mRightAnsText;
 
@@ -116,12 +122,22 @@ public class GameActivity extends AppCompatActivity {
         Intent intent=getIntent();
         level=intent.getIntExtra("LEVEL",0)-1;
 
+<<<<<<< HEAD
+        button=(Button)findViewById(R.id.button);
+        Judge=(TextView)findViewById(R.id.Judge);
+        Question=(TextView)findViewById(R.id.question);
+        Time=(TextView)findViewById(R.id.Times);
+        image = (ImageView) findViewById(R.id.character);
+        mGroundView = (LinearLayout) findViewById(R.id.background);
+        GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+=======
         mButton=(Button)findViewById(R.id.button);
         mJudgeText=(TextView)findViewById(R.id.Judge);
         mQuestionText=(TextView)findViewById(R.id.question);
         mTimeText=(TextView)findViewById(R.id.Times);
         mImageView = (ImageView) findViewById(R.id.character);
         GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
+>>>>>>> score_count
         Glide.with(this).load(R.drawable.ordinary).into(target);
 
         mTimes=1;//問題数の初期化
@@ -155,10 +171,13 @@ public class GameActivity extends AppCompatActivity {
                     mRightAnsText=Array[level][Rand];
                     mQuestionText.setText(mRightAnsText);
 
-
+<<<<<<< HEAD
+                    startAudioRecordingSafe();
+                    Times++;
+=======
                     startListening(mRightAnsText);
                     mTimes++;
-
+>>>>>>> score_count
                 }
             }
         });
