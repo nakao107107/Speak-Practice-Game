@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Speak-Practice-Game.iml" filepath="$PROJECT_DIR$/Speak-Practice-Game.iml" />
+<<<<<<< fec0339440313f805f5e7f7896b7bcf157080feb
+=======
+      <module fileurl="file://$PROJECT_DIR$/SpeakPracticeGame.iml" filepath="$PROJECT_DIR$/SpeakPracticeGame.iml" />
+>>>>>>> 細かな修正
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
