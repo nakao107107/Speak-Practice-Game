@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Created by nakao on 2017/10/22.
  */
 
-public class ArrayUtil implements ScoreAPIs {
+public class ArrayUtil {
 
     private static String GOJUON = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
 
@@ -78,8 +78,5 @@ public class ArrayUtil implements ScoreAPIs {
         return correctWord(right_word, sample_word, null);
     }
 
-    @Override
-    public void save(int[] eval_array, String key) {
 
-    }
 }
