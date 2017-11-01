@@ -1,11 +1,15 @@
 package com.example.nakao.speakpracticegame;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by nakao on 2017/10/22.
@@ -77,6 +81,25 @@ public class ArrayUtil {
     public static int[] correctWord(String right_word, String sample_word){
         return correctWord(right_word, sample_word, null);
     }
+
+    public static void saveArray(String key_word,int[] evalue_array,Context context){
+        StringBuilder builder = new StringBuilder();
+        for(int ev:evalue_array){
+            builder.append(String.valueOf(ev));
+        }
+        Log.d("saveArray:",builder.toString());
+
+        //Preferenceファイルに設定を保存
+        SharedPreferences data = context.getSharedPreferences("Database", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+        editor.putString(key_word, builder.toString());
+        editor.apply();
+    }
+
+    public static void getArray(){
+
+    }
+
 
 
 }

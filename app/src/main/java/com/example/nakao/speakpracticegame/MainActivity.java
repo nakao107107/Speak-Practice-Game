@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         GameStartButton.setOnClickListener(this);
         SettingButton.setOnClickListener(this);
 
+        ArrayUtil.saveArray("value",ArrayUtil.correctWord("たんぽぽ","たんぽぽ"),getApplicationContext());
+
     }
 
     @Override

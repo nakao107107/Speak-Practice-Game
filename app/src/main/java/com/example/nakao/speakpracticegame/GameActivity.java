@@ -273,10 +273,12 @@ public class GameActivity extends AppCompatActivity {
                     //kuromojiにかけてカタカナ変換
                     String tmp_string =tokenizerUtil.getKatakana(params[0]);
 
-                    Log.d("進捗","kuromojiの処理が完了しました");
+                    Log.d("進捗","kuromojiの処理が完了しました"+tmp_string);
 
                     //ひらがなに変換
-                    tmp_string= HiraganaKatakanaMatch.zenkakuHiraganaToZenkakuKatakana(params[0]);
+                    tmp_string= HiraganaKatakanaMatch.zenkakuHiraganaToZenkakuKatakana(tmp_string);
+                    Log.d("ひらがな", "doInBackground: "+tmp_string);
+
 
                     return tmp_string;
                 }
