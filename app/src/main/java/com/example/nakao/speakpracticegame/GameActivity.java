@@ -308,6 +308,7 @@ public class GameActivity extends AppCompatActivity {
                     if(mRightString.equals(s)){
                         sbuilder.append("せいかい");
                         drawableInt = R.drawable.happy;
+                        RightAnswerNumber++;
                     } else {
                         sbuilder.append("ざんねん「"+ s + "」ときこえたよ");
                         drawableInt = R.drawable.sad;
