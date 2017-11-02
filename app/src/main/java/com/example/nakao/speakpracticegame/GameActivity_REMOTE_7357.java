@@ -1,10 +1,8 @@
 package com.example.nakao.speakpracticegame;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,21 +14,15 @@ import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,10 +40,9 @@ public class GameActivity extends AppCompatActivity {
 
     private SpeechRecognizer sr;
 
-    Button mButton;
-    TextView mJudgeText,mQuestionText,mTimeText;
-    ImageView mImageView;
-    LinearLayout mGroundView;
+    private Button mButton;
+    private TextView mJudgeText,mQuestionText,mTimeText;
+    private ImageView mImageView;
 
     private String mRightAnsText;
 
@@ -66,9 +57,6 @@ public class GameActivity extends AppCompatActivity {
     TokenizerUtil tokenizerUtil;
 
     Handler mHandler=new Handler();
-
-    //パーミッション用の数字。何でも良い
-    int REQUEST_PERMISSION = 100;
 
 
 
@@ -121,7 +109,6 @@ public class GameActivity extends AppCompatActivity {
         mQuestionText=(TextView)findViewById(R.id.question);
         mTimeText=(TextView)findViewById(R.id.Times);
         mImageView = (ImageView) findViewById(R.id.character);
-        mGroundView = (LinearLayout) findViewById(R.id.background);
         GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
         Glide.with(this).load(R.drawable.ordinary).into(target);
 
@@ -156,9 +143,8 @@ public class GameActivity extends AppCompatActivity {
                     mRightAnsText=Array[level][Rand];
                     mQuestionText.setText(mRightAnsText);
 
-                    startAudioRecordingSafe();
+                    startListening(mRightAnsText);
                     mTimes++;
-
                 }
             }
         });
@@ -290,8 +276,7 @@ public class GameActivity extends AppCompatActivity {
                     Log.d("進捗","kuromojiの処理が完了しました");
 
                     //ひらがなに変換
-                    tmp_string= HiraganaKatakanaMatch.zenkakuHiraganaToZenkakuKatakana(tmp_string);
-
+                    tmp_string= HiraganaKatakanaMatch.zenkakuHiraganaToZenkakuKatakana(params[0]);
 
                     return tmp_string;
                 }
@@ -305,8 +290,6 @@ public class GameActivity extends AppCompatActivity {
                     if(mRightString.equals(s)){
                         sbuilder.append("せいかい");
                         drawableInt = R.drawable.happy;
-                        RightAnswerNumber++;
-
                     } else {
                         sbuilder.append("ざんねん「"+ s + "」ときこえたよ");
                         drawableInt = R.drawable.sad;
@@ -328,45 +311,5 @@ public class GameActivity extends AppCompatActivity {
             asyncTask.execute(result_string);
         }
     }
-
-    private void startAudioRecordingSafe() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED) {
-            startListening();
-        } else {
-            requestMicrophonePermission();
-        }
-    }
-
-    private void requestMicrophonePermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO) && ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
-            Snackbar.make(mGroundView, "Microphone access is required in order to record audio",
-                    Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ActivityCompat.requestPermissions(GameActivity.this, new String[]{
-                            Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS}, REQUEST_PERMISSION);
-                }
-
-            }).show();
-
-        } else {
-            ActivityCompat.requestPermissions(GameActivity.this, new String[]{
-                            Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS},
-                    REQUEST_PERMISSION);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSION && grantResults.length > 0 &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startListening();
-        }
-
-    }
-
-
 
 }
