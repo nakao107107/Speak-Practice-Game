@@ -54,6 +54,7 @@ public class GameActivity extends AppCompatActivity {
     LinearLayout mGroundView;
 
     private String mRightAnsText;
+    private String mRightString;
 
     final String[][] Array={{"あお","あか"},{"きいろ","みどり"},{"おれんじ","だいだい"},{"こんにちは","ありがとう"}};
 
@@ -74,7 +75,7 @@ public class GameActivity extends AppCompatActivity {
 
 
     // 音声認識を開始する
-    protected void startListening(String right_word) {
+    protected void startListening() {
         try {
             if (sr == null) {
                 sr = SpeechRecognizer.createSpeechRecognizer(this);
@@ -83,7 +84,7 @@ public class GameActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     finish();
                 }
-                sr.setRecognitionListener(new Listener(right_word));
+                sr.setRecognitionListener(new Listener());
             }
             // インテントの作成
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -168,11 +169,7 @@ public class GameActivity extends AppCompatActivity {
     // RecognitionListenerの定義
     // 中が空でも全てのメソッドを書く必要がある
     class Listener implements RecognitionListener {
-        private String mRightString;
 
-        public Listener(String right_string) {
-            mRightString = right_string;
-        }
 
         // 話し始めたときに呼ばれる
         public void onBeginningOfSpeech() {
