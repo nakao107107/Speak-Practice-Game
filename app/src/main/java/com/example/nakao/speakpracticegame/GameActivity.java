@@ -272,6 +272,7 @@ public class GameActivity extends AppCompatActivity {
             //１番可能性の高いものを取得
             final String result_string =(String)(results_array.get(0));
 
+            //正誤を確認し画面を更新
             judgeAndNext(result_string);
         }
 
@@ -284,10 +285,12 @@ public class GameActivity extends AppCompatActivity {
                     //kuromojiにかけてカタカナ変換
                     String tmp_string =tokenizerUtil.getKatakana(params[0]);
 
-                    Log.d("進捗","kuromojiの処理が完了しました");
+                    Log.d("進捗","kuromojiの処理が完了しました"+tmp_string);
 
                     //ひらがなに変換
                     tmp_string= HiraganaKatakanaMatch.zenkakuHiraganaToZenkakuKatakana(tmp_string);
+                    Log.d("ひらがな", "doInBackground: "+tmp_string);
+
 
 
                     return tmp_string;
@@ -298,6 +301,8 @@ public class GameActivity extends AppCompatActivity {
                     super.onPostExecute(s);
                     StringBuilder sbuilder = new StringBuilder();
                     int drawableInt;
+
+                    ArrayUtil.saveArray(ArrayUtil.EVALUE_KEY_WORD, ArrayUtil.correctWord(mRightAnsText, s), getApplicationContext());  //sharedpreferenceに正誤配列を保存する。
 
                     if(mRightString.equals(s)){
                         sbuilder.append("せいかい");
