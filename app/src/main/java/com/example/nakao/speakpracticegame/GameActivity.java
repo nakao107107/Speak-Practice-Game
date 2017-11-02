@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+//comment for git
 public class GameActivity extends AppCompatActivity {
 
     private SpeechRecognizer sr;
