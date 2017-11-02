@@ -49,9 +49,9 @@ public class GameActivity extends AppCompatActivity {
     private SpeechRecognizer sr;
 
 
-    Button button;
-    TextView Judge,Question,Time;
-    ImageView image;
+    Button mButton;
+    TextView mJudgeText,mQuestionText,mTimeText;
+    ImageView mImageView;
     LinearLayout mGroundView;
 
 
@@ -119,13 +119,13 @@ public class GameActivity extends AppCompatActivity {
         level=intent.getIntExtra("LEVEL",0)-1;
 
 
-        button=(Button)findViewById(R.id.button);
-        Judge=(TextView)findViewById(R.id.Judge);
-        Question=(TextView)findViewById(R.id.question);
-        Time=(TextView)findViewById(R.id.Times);
-        image = (ImageView) findViewById(R.id.character);
+        mButton=(Button)findViewById(R.id.button);
+        mJudgeText=(TextView)findViewById(R.id.Judge);
+        mQuestionText=(TextView)findViewById(R.id.question);
+        mTimeText=(TextView)findViewById(R.id.Times);
+        mImageView = (ImageView) findViewById(R.id.character);
         mGroundView = (LinearLayout) findViewById(R.id.background);
-        GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+        GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
         Glide.with(this).load(R.drawable.ordinary).into(target);
 
         mTimes=1;//問題数の初期化
@@ -161,7 +161,7 @@ public class GameActivity extends AppCompatActivity {
 
 
                     startAudioRecordingSafe();
-                    Times++;
+                    mTimes++;
 
                 }
             }
@@ -294,7 +294,7 @@ public class GameActivity extends AppCompatActivity {
                     Log.d("進捗","kuromojiの処理が完了しました");
 
                     //ひらがなに変換
-                    tmp_string= HiraganaKatakanaMatch.zenkakuHiraganaToZenkakuKatakana(params[0]);
+                    tmp_string= HiraganaKatakanaMatch.zenkakuHiraganaToZenkakuKatakana(tmp_string);
 
                     return tmp_string;
                 }
@@ -334,7 +334,7 @@ public class GameActivity extends AppCompatActivity {
     private void startAudioRecordingSafe() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED) {
-            startListening();
+            startListening(mRightAnsText);
         } else {
             requestMicrophonePermission();
         }
@@ -364,7 +364,7 @@ public class GameActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION && grantResults.length > 0 &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startListening();
+            startListening(mRightAnsText);
         }
 
     }
