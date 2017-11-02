@@ -44,7 +44,7 @@ public class GameActivity extends AppCompatActivity {
     TextView Judge,Question,Time;
     ImageView image;
 
-    String RealAnswer;
+    String realanswer;
 
     String[][] Array={{"あお","あか"},{"きいろ","みどり"},{"おれんじ","だいだい"},{"こんにちは","ありがとう"}};
 
@@ -142,8 +142,8 @@ public class GameActivity extends AppCompatActivity {
 
                     //問題の設定
                     Rand=new Random().nextInt(2);
-                    RealAnswer=Array[level][Rand];
-                    Question.setText(RealAnswer);
+                    realanswer=Array[level][Rand];
+                    Question.setText(realanswer);
 
                     startListening();
                     Times++;
@@ -268,7 +268,7 @@ public class GameActivity extends AppCompatActivity {
                     //ひらがなに変換
                     resultstring=new HiraganaKatakanaMatch().zenkakuHiraganaToZenkakuKatakana(resultstring);
 
-                    if(RealAnswer.equals(resultstring)){
+                    if(realanswer.equals(resultstring)){
 
                         handler.post(new Runnable() {
                             @Override
