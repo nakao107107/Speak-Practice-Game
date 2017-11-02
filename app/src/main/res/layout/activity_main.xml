@@ -48,4 +48,15 @@
         android:text="せってい"
         android:id="@+id/button2"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_state"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:text="せいせき"
+        android:id="@+id/button3"/>
+
 </LinearLayout>

@@ -1,11 +1,13 @@
 package com.example.nakao.speakpracticegame;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,8 +21,9 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    Button GameStartButton;
-    Button SettingButton;
+    Button mGameStartButton;
+    Button mSettingButton;
+    Button mScoreButton;
     ImageView image;
 
     @Override
@@ -32,13 +35,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
         Glide.with(this).load(R.drawable.ordinary).into(target);
 
-        GameStartButton = (Button)findViewById(R.id.button1);
-        SettingButton = (Button) findViewById(R.id.button2);
+        mGameStartButton = (Button)findViewById(R.id.button1);
+        mSettingButton = (Button) findViewById(R.id.button2);
+        mScoreButton = (Button)findViewById(R.id.button3);
 
-        GameStartButton.setOnClickListener(this);
-        SettingButton.setOnClickListener(this);
-
-        ArrayUtil.saveArray("value",ArrayUtil.correctWord("たんぽぽ","たんぽぽ"),getApplicationContext());
+        mGameStartButton.setOnClickListener(this);
+        mSettingButton.setOnClickListener(this);
+        mScoreButton.setOnClickListener(this);
 
     }
 
@@ -53,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent2=new Intent(v.getContext(),SettingActivity.class);
                 startActivity(intent2);
                 break;
+            case R.id.button3:
+                Intent intent3=new Intent(v.getContext(),ScoreActivity.class);
+                startActivity(intent3);
         }
     }
 }
