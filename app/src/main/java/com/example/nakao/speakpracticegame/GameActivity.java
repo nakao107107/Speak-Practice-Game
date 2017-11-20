@@ -146,6 +146,7 @@ public class GameActivity extends AppCompatActivity {
                 if(Times==ProgramNumber+1) {
                     Intent intent = new Intent(v.getContext(), ResultActivity.class);
                     intent.putExtra("RightAnswerNumber", RightAnswerNumber);
+                    intent.putExtra("level",level+1);
                     startActivity(intent);
 
                 }else{

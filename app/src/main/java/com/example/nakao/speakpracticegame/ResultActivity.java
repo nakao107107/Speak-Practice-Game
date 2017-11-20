@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     double Percentage;
     Button goHomeButton,goGameButton;
     ImageView image;
+    int level;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         intent=getIntent();
         Result=intent.getIntExtra("RightAnswerNumber",0);
+        level=intent.getIntExtra("level",1);
 
         //Preferenceファイルから問題数を取得（設定なしの場合10問）
         SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
@@ -55,6 +58,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         image=(ImageView)findViewById(R.id.judge);
 
+        Log.d("level",String.valueOf(level));
+
 
 
 
@@ -62,6 +67,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             Comment.setText("やったね！パーフェクト！");
             GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
             Glide.with(this).load(R.drawable.happy).into(target);
+
+
         }else if(Result>0.6){
             Comment.setText("いいかんじ！つぎはまんてんをめざそう！");
             GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
