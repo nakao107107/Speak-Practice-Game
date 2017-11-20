@@ -1,8 +1,10 @@
 package com.example.nakao.speakpracticegame;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,9 +13,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
@@ -27,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button GameStartButton;
     Button SettingButton;
     ImageView image;
+    LinearLayout linearlayout;
+    int currentlevel;
 
 
     @Override
@@ -40,9 +46,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         GameStartButton = (Button)findViewById(R.id.button1);
         SettingButton = (Button) findViewById(R.id.button2);
+        linearlayout=(LinearLayout)findViewById(R.id.background);
 
         GameStartButton.setOnClickListener(this);
         SettingButton.setOnClickListener(this);
+
+        //Preferenceファイルから現在の最高クリアレベルを取得
+        SharedPreferences process = getSharedPreferences("level", Context.MODE_PRIVATE);
+        currentlevel = process.getInt("currentlevel",0 );
+
+        Log.d("currentlevel",String.valueOf(currentlevel));
+
+        switch (currentlevel){
+            case 0:
+                linearlayout.setBackgroundResource(R.drawable.background0);
+                break;
+            case 1:
+                linearlayout.setBackgroundResource(R.drawable.background1);
+                break;
+            case 2:
+                linearlayout.setBackgroundResource(R.drawable.background2);
+                break;
+            case 3:
+                linearlayout.setBackgroundResource(R.drawable.background3);
+                break;
+            case 4:
+                linearlayout.setBackgroundResource(R.drawable.background4);
+                break;
+            default:
+                linearlayout.setBackgroundResource(R.drawable.background1);
+                break;
+        }
 
     }
 

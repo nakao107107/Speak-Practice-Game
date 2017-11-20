@@ -29,6 +29,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     Button goHomeButton,goGameButton;
     ImageView image;
     int level;
+    int currentlevel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +59,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         image=(ImageView)findViewById(R.id.judge);
 
-        Log.d("level",String.valueOf(level));
 
 
 
@@ -67,6 +67,23 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             Comment.setText("やったね！パーフェクト！");
             GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
             Glide.with(this).load(R.drawable.happy).into(target);
+
+            //Preferenceファイルから現在の最高クリアレベルを取得（設定なしの場合10問）
+            SharedPreferences process = getSharedPreferences("level", Context.MODE_PRIVATE);
+            currentlevel = process.getInt("currentlevel",0 );
+
+            //現在で最高のlevelをクリアした場合、Preferenceファイルに設定を保存
+
+            if(level>currentlevel){
+
+                SharedPreferences.Editor editor = process.edit();
+                editor.putInt("currentlevel",level);
+                editor.apply();
+
+                Log.d("level",String.valueOf(level));
+
+
+            }
 
 
         }else if(Result>0.6){
