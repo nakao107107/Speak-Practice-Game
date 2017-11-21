@@ -68,6 +68,7 @@ public class StageSelectActivity extends AppCompatActivity implements View.OnCli
     void goNextActivity(Intent intent,int level){
         intent.putExtra("LEVEL" ,level);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 }
 
