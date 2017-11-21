@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent=new Intent(v.getContext(),ModeSelectActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 return false;
             }
         });

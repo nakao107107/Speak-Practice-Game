@@ -27,7 +27,9 @@ public class ModeSelectActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modeselectgi);
+        setContentView(R.layout.activity_modeselect);
+
+
 
         GameStartButton = (Button)findViewById(R.id.button1);
         SettingButton = (Button) findViewById(R.id.button2);
