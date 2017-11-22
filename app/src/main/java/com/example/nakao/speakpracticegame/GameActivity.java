@@ -58,18 +58,16 @@ public class GameActivity extends AppCompatActivity {
 
     final String[][] Array={{"あお","あか"},{"きいろ","みどり"},{"おれんじ","だいだい"},{"こんにちは","ありがとう"}};
 
-    int Rand;//問題の選択のための乱数
-    int level=0;//レベル格納用
+    int mRand;//問題の選択のための乱数
+    int mLiver=0;//レベル格納用
     static int mTimes;//回数格納用
-    int RightAnswerNumber;//正解問数格納用
-    static int ProgramNumber;//問題数格納用
-
-    TokenizerUtil tokenizerUtil;
-
-    Handler mHandler=new Handler();
+    int mRightAnswerNumber;//正解問数格納用
+    static int mProgramNumber;//問題数格納用
 
     //パーミッション用の数字。何でも良い
     int REQUEST_PERMISSION = 100;
+
+    private boolean mKumojiSwitch = true;
 
 
 
@@ -115,7 +113,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.game_activity_main);
 
         Intent intent=getIntent();
-        level=intent.getIntExtra("LEVEL",0)-1;
+        mLiver=intent.getIntExtra("LEVEL",0)-1;
 
         mButton=(Button)findViewById(R.id.button);
         mJudgeText=(TextView)findViewById(R.id.Judge);
@@ -130,7 +128,7 @@ public class GameActivity extends AppCompatActivity {
 
         //Preferenceファイルから問題数を取得（設定なしの場合10問）
         SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
-        ProgramNumber = data.getInt("ProgramNumber",10 );
+        mProgramNumber = data.getInt("mProgramNumber",10 );
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,9 +140,9 @@ public class GameActivity extends AppCompatActivity {
                 GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
                 Glide.with(getApplicationContext()).load(R.drawable.ordinary).into(target);
 
-                if(mTimes==ProgramNumber+1) {
+                if(mTimes==mProgramNumber+1) {
                     Intent intent = new Intent(v.getContext(), ResultActivity.class);
-                    intent.putExtra("RightAnswerNumber", RightAnswerNumber);
+                    intent.putExtra("mmRightAnswerNumber", mRightAnswerNumber);
                     startActivity(intent);
 
                 }else{
@@ -153,8 +151,8 @@ public class GameActivity extends AppCompatActivity {
                     mJudgeText.setText("");
 
                     //問題の設定
-                    Rand=new Random().nextInt(2);
-                    mRightAnsText=Array[level][Rand];
+                    mRand=new Random().nextInt(2);
+                    mRightAnsText=Array[mLiver][mRand];
                     mQuestionText.setText(mRightAnsText);
 
                     startAudioRecordingSafe();
@@ -269,33 +267,31 @@ public class GameActivity extends AppCompatActivity {
             ArrayList results_array = results.getStringArrayList(
                     SpeechRecognizer.RESULTS_RECOGNITION);
 
-            //１番可能性の高いものを取得
-            final String result_string =(String)(results_array.get(0));
-
             //正誤を確認し画面を更新
-            judgeAndNext(result_string);
+            judgeAndNext(results_array);
+
         }
 
-        private void judgeAndNext(String result_string){
+        private void judgeAndNext(ArrayList<String> result_arrays){
 
-            AsyncTask<String,String,String> asyncTask = new AsyncTask<String, String, String>() {
+            AsyncTask<ArrayList<String>,String,String> asyncTask = new AsyncTask<ArrayList<String>, String, String>() {
+
+                //バックグラウンド処理。時間がかかる処理はここでし、return値はonPostExecuteの引数となる。
                 @Override
-                protected String doInBackground(String... params) {
+                protected String doInBackground(ArrayList<String>... params) {
 
-                    //kuromojiにかけてカタカナ変換
-                    String tmp_string =tokenizerUtil.getKatakana(params[0]);
+                    //Kuromojiを使うか、もしくは配列の中からひらがなを取得する。
+                    PredictStrategy predictStrategy = null;
+                    if(mKumojiSwitch == true){
+                        predictStrategy = new KuroPredictStrategy();
+                    } else {
+                        predictStrategy = new HiraPredictStrategy();
+                    }
 
-                    Log.d("進捗","kuromojiの処理が完了しました"+tmp_string);
-
-                    //ひらがなに変換
-                    tmp_string= HiraganaKatakanaMatch.zenkakuHiraganaToZenkakuKatakana(tmp_string);
-                    Log.d("ひらがな", "doInBackground: "+tmp_string);
-
-
-
-                    return tmp_string;
+                    return predictStrategy.predict(params[0]);
                 }
 
+                // 引数はdoInbackgroundで取得したひらがな。発音が正しいかどうか判断し、正しい場合画像を変化させる。
                 @Override
                 protected void onPostExecute(String s) {
                     super.onPostExecute(s);
@@ -307,7 +303,7 @@ public class GameActivity extends AppCompatActivity {
                     if(mRightString.equals(s)){
                         sbuilder.append("せいかい");
                         drawableInt = R.drawable.happy;
-                        RightAnswerNumber++;
+                        mRightAnswerNumber++;
 
                     } else {
                         sbuilder.append("ざんねん「"+ s + "」ときこえたよ");
@@ -318,7 +314,7 @@ public class GameActivity extends AppCompatActivity {
                     mJudgeText.setText(setting_text);
                     GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
                     Glide.with(getApplicationContext()).load(drawableInt).into(target);
-                    if(mTimes==ProgramNumber+1) {
+                    if(mTimes==mProgramNumber+1) {
                         mButton.setText("けっかはっぴょうへすすむ");
                     } else {
                         mButton.setText("つぎのもんだいにチャレンジ");
@@ -327,7 +323,10 @@ public class GameActivity extends AppCompatActivity {
                 }
             };
 
-            asyncTask.execute(result_string);
+            asyncTask.execute(result_arrays);
+
+
+            
         }
     }
 
