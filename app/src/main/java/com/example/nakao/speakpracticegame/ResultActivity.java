@@ -42,7 +42,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         //Preferenceファイルから問題数を取得（設定なしの場合10問）
         SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
-        ProgramNumber = data.getInt("ProgramNumber",10 );
+        ProgramNumber = data.getInt("program_number",10 );
 
         Percentage=Result/ProgramNumber;
 
@@ -69,7 +69,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             Glide.with(this).load(R.drawable.happy).into(target);
 
             //Preferenceファイルから現在の最高クリアレベルを取得（設定なしの場合10問）
-            SharedPreferences process = getSharedPreferences("level", Context.MODE_PRIVATE);
+            SharedPreferences process = getSharedPreferences("Level", Context.MODE_PRIVATE);
             currentlevel = process.getInt("currentlevel",0 );
 
             //現在で最高のlevelをクリアした場合、Preferenceファイルに設定を保存

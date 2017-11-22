@@ -131,7 +131,7 @@ public class GameActivity extends AppCompatActivity {
 
         //Preferenceファイルから問題数を取得（設定なしの場合10問）
         SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
-        ProgramNumber = data.getInt("ProgramNumber",10 );
+        ProgramNumber = data.getInt("program_number",10 );
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

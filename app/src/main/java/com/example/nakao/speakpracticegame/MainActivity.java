@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Preferenceファイルから現在の最高クリアレベルを取得
-        SharedPreferences process = getSharedPreferences("level", Context.MODE_PRIVATE);
+        SharedPreferences process = getSharedPreferences("Level", Context.MODE_PRIVATE);
         currentlevel = process.getInt("currentlevel",0 );
 
 

@@ -8,7 +8,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by nakao on 2017/06/18.
@@ -16,64 +19,84 @@ import android.widget.TextView;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
-    Button GoHomebutton;
-    Button Plus,Minus;
-    TextView Number;
+    Button homebtn,rstbtn;
+    EditText pnedit;
+    CheckBox chkbox;
 
-    int ProgramNumber;
+    SharedPreferences sp1,sp2;
+    SharedPreferences.Editor editor1,editor2;
+
+    Intent intent;
+
+    int num;
+    int cnum;
+    boolean judge;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
 
-        GoHomebutton=(Button) findViewById(R.id.goHomeButton);
-        Plus=(Button)findViewById(R.id.plus);
-        Minus=(Button)findViewById(R.id.minus);
+        homebtn=(Button) findViewById(R.id.home);
+        rstbtn=(Button)findViewById(R.id.reset);
+        pnedit=(EditText)findViewById(R.id.program_number);
+        chkbox=(CheckBox)findViewById(R.id.judge);
 
-        GoHomebutton.setOnClickListener(this);
-        Plus.setOnClickListener(this);
-        Minus.setOnClickListener(this);
+        homebtn.setOnClickListener(this);
+        rstbtn.setOnClickListener(this);
 
-        SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
-        ProgramNumber = data.getInt("ProgramNumber",10 );
+        sp1 = getSharedPreferences("Setting", Context.MODE_PRIVATE);
+        sp2 = getSharedPreferences("Level", Context.MODE_PRIVATE);
+        editor1 = sp1.edit();
+        editor2 = sp2.edit();
 
-        Number=(TextView)findViewById(R.id.number);
-        Number.setText(String.valueOf(ProgramNumber));
+        //EditTextがからであった場合エラーが起こるので、それをなくす
+        cnum=sp1.getInt("program_number",5);
+        pnedit.setText(String.valueOf(cnum));
 
+        intent = new Intent(this, MainActivity.class);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
 
-            case R.id.goHomeButton:
+        switch (v.getId()) {
+
+            case R.id.home:
+
+                //EditTextが空だった場合の対策
+
+                if(pnedit.length()!=0){
+                    num=Integer.parseInt(pnedit.getText().toString());
+                }else{
+                    num=cnum;
+                }
+                judge=chkbox.isChecked();
+
                 //Preferenceファイルに設定を保存
-                SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = data.edit();
-                editor.putInt("ProgramNumber", ProgramNumber);
-                editor.apply();
 
-                Intent intent=new Intent(this,MainActivity.class);
+                editor1.putInt("program_number", num);
+                editor1.putBoolean("judge", judge);
+                editor1.apply();
+
                 startActivity(intent);
 
                 break;
-            case R.id.plus:
-                if(ProgramNumber<100){
 
-                    //問題数を更新
-                    ProgramNumber++;
-                    Number.setText(String.valueOf(ProgramNumber));
-                }
-                break;
-            case R.id.minus:
-                if(ProgramNumber>1){
+            case R.id.reset:
 
-                    //問題数を更新
-                    ProgramNumber--;
-                    Number.setText(String.valueOf(ProgramNumber));
-                }
+                //全Preferenceファイルを削除
+                editor1.clear();
+                editor2.clear();
+                editor1.commit();
+                editor2.commit();
+
+                Toast.makeText(this, "ゲームにかかわる全記録を削除してタイトルへ戻る", Toast.LENGTH_SHORT).show();
+
+                startActivity(intent);
+
                 break;
         }
+
     }
 }
