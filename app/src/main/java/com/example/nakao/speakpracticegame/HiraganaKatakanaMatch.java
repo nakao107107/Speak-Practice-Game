@@ -52,7 +52,7 @@ public class HiraganaKatakanaMatch {
 
     }
 
-    public static String zenkakuHiraganaToZenkakuKatakana(String s) {
+    public String zenkakuHiraganaToZenkakuKatakana(String s) {
         StringBuffer sb = new StringBuffer(s);
         for (int i = 0; i < sb.length(); i++) {
             char c = sb.charAt(i);

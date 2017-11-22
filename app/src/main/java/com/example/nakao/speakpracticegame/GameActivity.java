@@ -54,7 +54,6 @@ public class GameActivity extends AppCompatActivity {
     LinearLayout mGroundView;
 
     private String mRightAnsText;
-    private String mRightString;
 
     final String[][] Array={{"あお","あか"},{"きいろ","みどり"},{"おれんじ","だいだい"},{"こんにちは","ありがとう"}};
 
@@ -142,7 +141,7 @@ public class GameActivity extends AppCompatActivity {
 
                 if(mTimes==mProgramNumber+1) {
                     Intent intent = new Intent(v.getContext(), ResultActivity.class);
-                    intent.putExtra("mmRightAnswerNumber", mRightAnswerNumber);
+                    intent.putExtra("RightAnswerNumber", mRightAnswerNumber);
                     startActivity(intent);
 
                 }else{
@@ -300,7 +299,9 @@ public class GameActivity extends AppCompatActivity {
 
                     ArrayUtil.saveArray(ArrayUtil.EVALUE_KEY_WORD, ArrayUtil.correctWord(mRightAnsText, s), getApplicationContext());  //sharedpreferenceに正誤配列を保存する。
 
-                    if(mRightString.equals(s)){
+                    HiraganaKatakanaMatch hMatch = new HiraganaKatakanaMatch();
+
+                    if(mRightAnsText.equals(hMatch.zenkakuHiraganaToZenkakuKatakana(s))){
                         sbuilder.append("せいかい");
                         drawableInt = R.drawable.happy;
                         mRightAnswerNumber++;

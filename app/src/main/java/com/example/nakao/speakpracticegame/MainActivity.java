@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSettingButton.setOnClickListener(this);
         mScoreButton.setOnClickListener(this);
 
+
     }
 
 
