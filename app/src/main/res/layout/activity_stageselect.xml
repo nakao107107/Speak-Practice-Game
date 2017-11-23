@@ -15,7 +15,7 @@
         android:id="@+id/stage1"
         android:layout_margin="5dp"
         android:textColor="@color/white"
-        android:background="@drawable/board"
+        android:background="@drawable/button_board_state"
         />
     <Button
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:id="@+id/stage2"
         android:layout_margin="5dp"
         android:textColor="@color/white"
-        android:background="@drawable/board"
+        android:background="@drawable/button_board_state"
         />
     <Button
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
         android:id="@+id/stage3"
         android:layout_margin="5dp"
         android:textColor="@color/white"
-        android:background="@drawable/board"
+        android:background="@drawable/button_board_state"
         />
     <Button
         android:layout_width="match_parent"
@@ -51,7 +51,8 @@
         android:id="@+id/stage4"
         android:layout_margin="5dp"
         android:textColor="@color/white"
-        android:background="@drawable/board"
+        android:background="@drawable/button_board_state
+"
         />
 
     <Button

@@ -73,6 +73,17 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:text="高速判定機能をONにすると、判定速度がおよそ２倍になります。ただし正解の精度は少し甘くなります(高速判定機能は未実装)"
+        android:textSize="15dp"
+        android:layout_gravity="center"
+        />
+
 
 
     <Button

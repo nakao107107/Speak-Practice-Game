@@ -14,7 +14,7 @@
         android:textColor="@color/white"
         android:text="ゲーム"
         android:id="@+id/button1"
-        android:background="@drawable/board"/>
+        android:background="@drawable/button_board_state"/>
 
     <Button
         android:layout_width="match_parent"
@@ -25,6 +25,6 @@
         android:textColor="@color/white"
         android:text="設定\n\n（保護者の方向け）"
         android:id="@+id/button2"
-        android:background="@drawable/board"/>
+        android:background="@drawable/button_board_state"/>
 
 </LinearLayout>
