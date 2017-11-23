@@ -2,25 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nakao.speakpracticegame">
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:hardwareAccelerated="false"
         android:largeHeap="true"
         >
-
 
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <activity android:name=".ModeSelectActivity">
 
@@ -39,6 +40,11 @@
         </activity>
 
         <activity android:name=".StageSelectActivity">
+
+
+        </activity>
+
+        <activity android:name=".ScoreActivity">
 
         </activity>
     </application>

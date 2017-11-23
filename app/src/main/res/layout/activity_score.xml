@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background2"
+    tools:context="com.example.nakao.speakpracticegame.ScoreActivity">
+
+    <TextView
+        android:background="@drawable/board"
+        android:id="@+id/textView2"
+        android:layout_width="321dp"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:text="よかったじゅん"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/listView"
+        app:layout_constraintVertical_bias="0.363" />
+
+    <Button
+        android:background="@drawable/button_score_state"
+        android:id="@+id/sortButton"
+        android:layout_width="354dp"
+        android:layout_height="40dp"
+        android:text="わるかったじゅん にする"
+        android:textColor="@color/white"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/listView"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintVertical_bias="0.333" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="375dp"
+        android:layout_height="380dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/black_board"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

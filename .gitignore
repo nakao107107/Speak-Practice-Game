@@ -3,8 +3,18 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+<<<<<<< HEAD
+=======
+.idea/modules.xml
+.idea/misc.xml
+>>>>>>> score_count
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .idea/vcs.xml
+.idea/misc.xml
+.idea/modules.xml
+
+
+.idea/misc.xml

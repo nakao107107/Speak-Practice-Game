@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -48,29 +49,26 @@ public class GameActivity extends AppCompatActivity {
 
     private SpeechRecognizer sr;
 
-    Button button;
-    TextView Judge,Question,Time;
-    ImageView image;
+    Button mButton;
+    TextView mJudgeText,mQuestionText,mTimeText;
+    ImageView mImageView;
     LinearLayout mGroundView;
 
     String realanswer;
+    private String mRightAnsText;
 
-    String[][] Array={{"あお","あか"},{"きいろ","みどり"},{"おれんじ","だいだい"},{"こんにちは","ありがとう"}};
+    final String[][] Array={{"あお","あか"},{"きいろ","みどり"},{"おれんじ","だいだい"},{"こんにちは","ありがとう"}};
 
-    int Rand;//問題の選択のための乱数
-    int level=0;//レベル格納用
-    static int Times;//回数格納用
-    int RightAnswerNumber;//正解問数格納用
-    static int ProgramNumber;//問題数格納用
-
-    TokenizerUtil tokenizerUtil;
-
-    String resultstring;
-
-    Handler handler=new Handler();
+    int mRand;//問題の選択のための乱数
+    int mLiver=0;//レベル格納用
+    static int mTimes;//回数格納用
+    int mRightAnswerNumber;//正解問数格納用
+    static int mProgramNumber;//問題数格納用
 
     //パーミッション用の数字。何でも良い
     int REQUEST_PERMISSION = 100;
+
+    private boolean mKumojiSwitch = true;
 
 
 
@@ -85,7 +83,7 @@ public class GameActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     finish();
                 }
-                sr.setRecognitionListener(new listener());
+                sr.setRecognitionListener(new Listener());
             }
             // インテントの作成
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -116,51 +114,50 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.game_activity_main);
 
         Intent intent=getIntent();
-        level=intent.getIntExtra("LEVEL",0)-1;
+        mLiver=intent.getIntExtra("LEVEL",0)-1;
 
-        button=(Button)findViewById(R.id.button);
-        Judge=(TextView)findViewById(R.id.Judge);
-        Question=(TextView)findViewById(R.id.question);
-        Time=(TextView)findViewById(R.id.Times);
-        image = (ImageView) findViewById(R.id.character);
+        mButton=(Button)findViewById(R.id.button);
+        mJudgeText=(TextView)findViewById(R.id.Judge);
+        mQuestionText=(TextView)findViewById(R.id.question);
+        mTimeText=(TextView)findViewById(R.id.Times);
+        mImageView = (ImageView) findViewById(R.id.character);
         mGroundView = (LinearLayout) findViewById(R.id.background);
-        GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+        GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
         Glide.with(this).load(R.drawable.ordinary).into(target);
 
-        Times=1;//問題数の初期化
+        mTimes=1;//問題数の初期化
 
         //Preferenceファイルから問題数を取得（設定なしの場合10問）
         SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
-        ProgramNumber = data.getInt("program_number",10 );
+        mProgramNumber = data.getInt("mProgramNumber",10 );
 
-        button.setOnClickListener(new View.OnClickListener() {
+        mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                button.setEnabled(false);//誤作動防止用にスタートボタンを使用不能にする
-                button.setText("ゲームちゅう");
+                mButton.setEnabled(false);//誤作動防止用にスタートボタンを使用不能にする
+                mButton.setText("ゲームちゅう");
 
-                GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
+                GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
                 Glide.with(getApplicationContext()).load(R.drawable.ordinary).into(target);
 
-                if(Times==ProgramNumber+1) {
+                if(mTimes==mProgramNumber+1) {
                     Intent intent = new Intent(v.getContext(), ResultActivity.class);
-                    intent.putExtra("RightAnswerNumber", RightAnswerNumber);
-                    intent.putExtra("level",level+1);
+                    intent.putExtra("level",mLiver+1);
+                    intent.putExtra("RightAnswerNumber", mRightAnswerNumber);
                     startActivity(intent);
 
                 }else{
 
-                    Time.setText("だい"+Times+"もん");
-                    Judge.setText("");
+                    mTimeText.setText("だい"+mTimes+"もん");
+                    mJudgeText.setText("");
 
                     //問題の設定
-                    Rand=new Random().nextInt(2);
-                    realanswer=Array[level][Rand];
-                    Question.setText(realanswer);
+                    mRand=new Random().nextInt(2);
+                    mRightAnsText=Array[mLiver][mRand];
+                    mQuestionText.setText(mRightAnsText);
+                    mTimes++;
 
-                    startAudioRecordingSafe();
-                    Times++;
                 }
             }
         });
@@ -169,7 +166,8 @@ public class GameActivity extends AppCompatActivity {
 
     // RecognitionListenerの定義
     // 中が空でも全てのメソッドを書く必要がある
-    class listener implements RecognitionListener {
+    class Listener implements RecognitionListener {
+
 
         // 話し始めたときに呼ばれる
         public void onBeginningOfSpeech() {
@@ -189,7 +187,7 @@ public class GameActivity extends AppCompatActivity {
         // 話し終わった時に呼ばれる
         public void onEndOfSpeech() {
 
-            Judge.setText("かんがえちゅう");
+            mJudgeText.setText("かんがえちゅう");
 
         }
 
@@ -221,9 +219,9 @@ public class GameActivity extends AppCompatActivity {
                 // No recognition result matched
                 case SpeechRecognizer.ERROR_NO_MATCH:
                     reason = "わからなかったよ　もう１かいやってみて！";
-                    Times--;
-                    button.setText("もう１どチャレンジ");
-                    button.setEnabled(true);
+                    mTimes--;
+                    mButton.setText("もう１どチャレンジ");
+                    mButton.setEnabled(true);
                     break;
                 // RecognitionService busy
                 case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
@@ -237,12 +235,12 @@ public class GameActivity extends AppCompatActivity {
                 // No speech input
                 case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                     reason = "わからなかったよ　もう１かいやってみて！";
-                    Times--;
-                    button.setText("もう１どチャレンジ");
-                    button.setEnabled(true);
+                    mTimes--;
+                    mButton.setText("もう１どチャレンジ");
+                    mButton.setEnabled(true);
                     break;
             }
-            Judge.setText(reason);
+            mJudgeText.setText(reason);
             stopListening();
         }
 
@@ -257,7 +255,7 @@ public class GameActivity extends AppCompatActivity {
 
         // 音声認識の準備ができた時に呼ばれる
         public void onReadyForSpeech(Bundle params) {
-            Judge.setText("はなしてみて！");
+            mJudgeText.setText("はなしてみて！");
         }
 
         // 認識結果が準備できた時に呼ばれる
@@ -269,71 +267,69 @@ public class GameActivity extends AppCompatActivity {
             ArrayList results_array = results.getStringArrayList(
                     SpeechRecognizer.RESULTS_RECOGNITION);
 
-            //１番可能性の高いものを取得
-            resultstring =(String)(results_array.get(0));
+            //正誤を確認し画面を更新
+            judgeAndNext(results_array);
 
-            new Thread(new Runnable() {
+
+        }
+
+        private void judgeAndNext(ArrayList<String> result_arrays){
+
+            AsyncTask<ArrayList<String>,String,String> asyncTask = new AsyncTask<ArrayList<String>, String, String>() {
+
+                //バックグラウンド処理。時間がかかる処理はここでし、return値はonPostExecuteの引数となる。
                 @Override
-                public void run() {
-                    //kuromojiにかけてカタカナ変換
-                    resultstring=tokenizerUtil.getKatakana(resultstring);
-                    Log.d("進捗","kuromojiの処理が完了しました");
+                protected String doInBackground(ArrayList<String>... params) {
 
-                    //ひらがなに変換
-                    resultstring=new HiraganaKatakanaMatch().zenkakuHiraganaToZenkakuKatakana(resultstring);
-
-                    if(realanswer.equals(resultstring)){
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Judge.setText("せいかい！");
-                                GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
-                                Glide.with(getApplicationContext()).load(R.drawable.happy).into(target);
-                                RightAnswerNumber++;
-                                button.setText("つぎのもんだいにチャレンジ");
-                                button.setEnabled(true);
-
-                            }
-                        });
-
-                    }else{
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                Judge.setText("ざんねん…「"+resultstring+"」ってきこえたよ");
-                                GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
-                                Glide.with(getApplicationContext()).load(R.drawable.sad).into(target);
-                                button.setText("つぎのもんだいにチャレンジ");
-                                button.setEnabled(true);
-
-                            }
-                        });
-
+                    //Kuromojiを使うか、もしくは配列の中からひらがなを取得する。
+                    PredictStrategy predictStrategy = null;
+                    if(mKumojiSwitch == true){
+                        predictStrategy = new KuroPredictStrategy();
+                    } else {
+                        predictStrategy = new HiraPredictStrategy();
                     }
 
-                    if(Times==ProgramNumber+1){
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                button.setText("けっかはっぴょうへすすむ");
-                                button.setEnabled(true);
-
-                            }
-                        });
-
-                    }
-
-
+                    return predictStrategy.predict(params[0]);
                 }
-            }).start();
+
+                // 引数はdoInbackgroundで取得したひらがな。発音が正しいかどうか判断し、正しい場合画像を変化させる。
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+                    StringBuilder sbuilder = new StringBuilder();
+                    int drawableInt;
+
+                    ArrayUtil.saveArray(ArrayUtil.EVALUE_KEY_WORD, ArrayUtil.correctWord(mRightAnsText, s), getApplicationContext());  //sharedpreferenceに正誤配列を保存する。
+
+                    HiraganaKatakanaMatch hMatch = new HiraganaKatakanaMatch();
+
+                    if(mRightAnsText.equals(hMatch.zenkakuHiraganaToZenkakuKatakana(s))){
+                        sbuilder.append("せいかい");
+                        drawableInt = R.drawable.happy;
+                        mRightAnswerNumber++;
+
+                    } else {
+                        sbuilder.append("ざんねん「"+ s + "」ときこえたよ");
+                        drawableInt = R.drawable.sad;
+                    }
+
+                    String setting_text = sbuilder.toString();
+                    mJudgeText.setText(setting_text);
+                    GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
+                    Glide.with(getApplicationContext()).load(drawableInt).into(target);
+                    if(mTimes==mProgramNumber+1) {
+                        mButton.setText("けっかはっぴょうへすすむ");
+                    } else {
+                        mButton.setText("つぎのもんだいにチャレンジ");
+                    }
+                    mButton.setEnabled(true);
+                }
+            };
+
+            asyncTask.execute(result_arrays);
 
 
-
-
+            
         }
     }
 
