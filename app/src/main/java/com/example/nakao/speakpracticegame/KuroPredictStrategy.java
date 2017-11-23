@@ -14,9 +14,8 @@ import java.util.ArrayList;
  * Created by ryosuke on 17/11/22.
  */
 
-public class KuroPredictStrategy implements PredictStrategy {
+public class KuroPredictStrategy {
 
-    @Override
     public String predict(ArrayList<String> arrayList) {
 
         //kuromojiにかけてカタカナ変換
@@ -36,8 +35,6 @@ public class KuroPredictStrategy implements PredictStrategy {
         for (Token token : mTokenizer.tokenize(word)) {
 
             String feature=token.getReading();
-            Log.d("getAllFeatureArrayの長さ", feature);
-
             sb.append(feature);
         }
         return sb.toString();

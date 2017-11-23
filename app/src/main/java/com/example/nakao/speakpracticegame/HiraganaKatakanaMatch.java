@@ -66,6 +66,8 @@ public class HiraganaKatakanaMatch {
                 sb.setCharAt(i, 'う');
                 sb.insert(i + 1, '゛');
                 i++;
+            } else{
+                //もともとひらがなだった場合は何もしない
             }
         }
         return sb.toString();

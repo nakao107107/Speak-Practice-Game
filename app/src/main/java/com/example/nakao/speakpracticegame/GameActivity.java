@@ -129,7 +129,8 @@ public class GameActivity extends AppCompatActivity {
 
         //Preferenceファイルから問題数を取得（設定なしの場合10問）
         SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
-        mProgramNumber = data.getInt("mProgramNumber",10 );
+        mProgramNumber = data.getInt("mProgramNumber",5 );
+        mKumojiSwitch=data.getBoolean("judge",true);
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +157,8 @@ public class GameActivity extends AppCompatActivity {
                     mRand=new Random().nextInt(2);
                     mRightAnsText=Array[mLiver][mRand];
                     mQuestionText.setText(mRightAnsText);
+
+                    startAudioRecordingSafe();
                     mTimes++;
 
                 }
@@ -284,12 +287,18 @@ public class GameActivity extends AppCompatActivity {
                     //Kuromojiを使うか、もしくは配列の中からひらがなを取得する。
                     PredictStrategy predictStrategy = null;
                     if(mKumojiSwitch == true){
-                        predictStrategy = new KuroPredictStrategy();
+
+                        Log.d("判定方法","ひらがな");
+                        return new HiraPredictStrategy().predict(params[0]);
+
                     } else {
-                        predictStrategy = new HiraPredictStrategy();
+
+                        Log.d("判定方法","クロモジ");
+                        return new KuroPredictStrategy().predict(params[0]);
+
                     }
 
-                    return predictStrategy.predict(params[0]);
+
                 }
 
                 // 引数はdoInbackgroundで取得したひらがな。発音が正しいかどうか判断し、正しい場合画像を変化させる。

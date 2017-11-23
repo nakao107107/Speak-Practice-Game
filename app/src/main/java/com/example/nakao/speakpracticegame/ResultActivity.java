@@ -42,7 +42,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         //Preferenceファイルから問題数を取得（設定なしの場合10問）
         SharedPreferences data = getSharedPreferences("Setting", Context.MODE_PRIVATE);
-        ProgramNumber = data.getInt("program_number",10 );
+        ProgramNumber = data.getInt("mProgramNumber",5 );
 
         Percentage=Result/ProgramNumber;
 

@@ -27,4 +27,15 @@
         android:id="@+id/button2"
         android:background="@drawable/button_board_state"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="15dp"
+        android:textSize="30dp"
+        android:textColor="@color/white"
+        android:text="ゲームのきろく"
+        android:id="@+id/button3"
+        android:background="@drawable/button_board_state"/>
+
 </LinearLayout>

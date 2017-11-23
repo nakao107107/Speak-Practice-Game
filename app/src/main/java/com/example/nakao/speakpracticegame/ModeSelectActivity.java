@@ -18,7 +18,7 @@ import com.example.nakao.speakpracticegame.R;
 
 public class ModeSelectActivity extends AppCompatActivity implements View.OnClickListener{
 
-    Button GameStartButton,SettingButton;
+    Button GameStartButton,SettingButton,RecordButton;
     LinearLayout linearlayout;
     SharedPreferences process;
 
@@ -33,10 +33,12 @@ public class ModeSelectActivity extends AppCompatActivity implements View.OnClic
 
         GameStartButton = (Button)findViewById(R.id.button1);
         SettingButton = (Button) findViewById(R.id.button2);
+        RecordButton=(Button)findViewById(R.id.button3);
         linearlayout=(LinearLayout)findViewById(R.id.background);
 
         GameStartButton.setOnClickListener(this);
         SettingButton.setOnClickListener(this);
+        RecordButton.setOnClickListener(this);
 
         //Preferenceファイルから現在の最高クリアレベルを取得
         process = getSharedPreferences("level", Context.MODE_PRIVATE);
@@ -76,6 +78,11 @@ public class ModeSelectActivity extends AppCompatActivity implements View.OnClic
             case R.id.button2:
                 Intent intent2=new Intent(v.getContext(),SettingActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.button3:
+                Intent intent3=new Intent(v.getContext(),ScoreActivity.class);
+                startActivity(intent3);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 break;
         }
 

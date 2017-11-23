@@ -51,8 +51,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         editor2 = sp2.edit();
 
         //EditTextがからであった場合エラーが起こるので、それをなくす
-        cnum=sp1.getInt("program_number",5);
+        cnum=sp1.getInt("mProgramNumber",5);
         pnedit.setText(String.valueOf(cnum));
+        judge=sp1.getBoolean("judge",false);
+        chkbox.setChecked(judge);
 
         intent = new Intent(this, MainActivity.class);
     }
@@ -75,7 +77,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
                 //Preferenceファイルに設定を保存
 
-                editor1.putInt("program_number", num);
+                editor1.putInt("mProgramNumber", num);
                 editor1.putBoolean("judge", judge);
                 editor1.apply();
 
