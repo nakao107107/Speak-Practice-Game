@@ -2,58 +2,130 @@
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#D3EDFB"
+    android:background="#00E676"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text=""
-        android:textSize="40dp"
+        android:layout_weight="2"
+        android:layout_margin="10dp"
+        android:text="けっかはっぴょう"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:gravity="center"
-        android:textColor="@color/lightblue1"
-        android:id="@+id/result"/>
+        android:paddingBottom="10dp"
+        android:background="@drawable/ribon"/>
 
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:layout_margin="5dp"
-        android:id="@+id/judge"/>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:id="@+id/comment"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:background="@drawable/flame_style"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:padding="10dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:orientation="horizontal">
 
-    <Button
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/star_bright"
+            android:id="@+id/star1"
+            />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            android:id="@+id/star2"
+            android:src="@drawable/star_bright" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/star_bright"
+            android:id="@+id/star3"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="レベルをえらんでもう１どチャレンジ"
-        android:id="@+id/goGameButton"
-        android:background="@drawable/button_state"
-        android:textColor="@color/white"
-        android:layout_margin="5dp"
-        />
-    <Button
+        android:layout_weight="7"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/mori"
+            android:scaleType="centerCrop"
+            android:id="@+id/background"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tori_ordinary"
+            android:id="@+id/judge"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="タイトルにもどる"
-        android:id="@+id/goHomeButton"
-        android:background="@drawable/button_state"
-        android:textColor="@color/white"
-        android:layout_margin="5dp"
-        />
+        android:layout_weight="7"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:background="#00E676">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:id="@+id/comment"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
+            android:padding="10dp"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="もう１どチャレンジ"
+            android:id="@+id/goGameButton"
+            android:background="@drawable/button_state_green"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:text="マップにもどる"
+            android:id="@+id/goHomeButton"
+            android:background="@drawable/button_state_green"
+            android:textColor="@color/white"
+
+            />
+
+    </LinearLayout>
+
+
 
 
 

@@ -1,41 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/background"
-    android:background="@drawable/background0">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Button
+
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="15dp"
-        android:textSize="30dp"
-        android:textColor="@color/white"
-        android:text="ゲーム"
-        android:id="@+id/button1"
-        android:background="@drawable/button_board_state"/>
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/home"
+        android:scaleType="centerCrop"
+        />
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="15dp"
-        android:textSize="30dp"
-        android:textColor="@color/white"
-        android:text="設定\n\n（保護者の方向け）"
-        android:id="@+id/button2"
-        android:background="@drawable/button_board_state"/>
+        android:layout_height="match_parent"
+        android:gravity="bottom"
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="15dp"
-        android:textSize="30dp"
-        android:textColor="@color/white"
-        android:text="ゲームのきろく"
-        android:id="@+id/button3"
-        android:background="@drawable/button_board_state"/>
+        android:orientation="vertical">
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/character"
+            android:src="@drawable/tori_ordinary"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            >
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:background="@drawable/button_state_green"
+                android:id="@+id/game"
+                android:text="ぼうけん"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:background="@drawable/button_state_green"
+                android:id="@+id/setting"
+                android:text="せってい"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:id="@+id/record"
+                android:background="@drawable/button_state_green"
+                android:text="きろく"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

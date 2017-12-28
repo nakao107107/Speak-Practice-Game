@@ -11,16 +11,18 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.nakao.speakpracticegame.R;
 
 
 public class ModeSelectActivity extends AppCompatActivity implements View.OnClickListener{
 
     Button GameStartButton,SettingButton,RecordButton;
-    LinearLayout linearlayout;
-    SharedPreferences process;
+    ImageView mImageView;
 
     int currentlevel;
 
@@ -30,40 +32,17 @@ public class ModeSelectActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_modeselect);
 
 
+        GameStartButton = (Button)findViewById(R.id.game);
+        SettingButton = (Button) findViewById(R.id.setting);
+        RecordButton=(Button)findViewById(R.id.record);
+        mImageView=(ImageView)findViewById(R.id.character);
 
-        GameStartButton = (Button)findViewById(R.id.button1);
-        SettingButton = (Button) findViewById(R.id.button2);
-        RecordButton=(Button)findViewById(R.id.button3);
-        linearlayout=(LinearLayout)findViewById(R.id.background);
 
         GameStartButton.setOnClickListener(this);
         SettingButton.setOnClickListener(this);
         RecordButton.setOnClickListener(this);
-
-        //Preferenceファイルから現在の最高クリアレベルを取得
-        process = getSharedPreferences("level", Context.MODE_PRIVATE);
-        currentlevel = process.getInt("currentlevel",0 );
-
-        switch (currentlevel){
-            case 0:
-                linearlayout.setBackgroundResource(R.drawable.background0);
-                break;
-            case 1:
-                linearlayout.setBackgroundResource(R.drawable.background1);
-                break;
-            case 2:
-                linearlayout.setBackgroundResource(R.drawable.background2);
-                break;
-            case 3:
-                linearlayout.setBackgroundResource(R.drawable.background3);
-                break;
-            case 4:
-                linearlayout.setBackgroundResource(R.drawable.background4);
-                break;
-            default:
-                linearlayout.setBackgroundResource(R.drawable.background1);
-                break;
-        }
+        GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
+        Glide.with(getApplicationContext()).load(R.drawable.tori_ordinary).into(target);
 
     }
 
@@ -71,15 +50,15 @@ public class ModeSelectActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
 
         switch (v.getId()){
-            case R.id.button1:
+            case R.id.game:
                 Intent intent=new Intent(v.getContext(),StageSelectActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.button2:
+            case R.id.setting:
                 Intent intent2=new Intent(v.getContext(),SettingActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.button3:
+            case R.id.record:
                 Intent intent3=new Intent(v.getContext(),ScoreActivity.class);
                 startActivity(intent3);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

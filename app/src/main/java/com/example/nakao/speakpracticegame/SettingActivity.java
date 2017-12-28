@@ -1,17 +1,23 @@
 package com.example.nakao.speakpracticegame;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by nakao on 2017/06/18.
@@ -31,6 +37,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     int num;
     int cnum;
     boolean judge;
+
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +66,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         chkbox.setChecked(judge);
 
         intent = new Intent(this, MainActivity.class);
+
     }
 
     @Override
@@ -86,19 +96,51 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.reset:
-
-                //全Preferenceファイルを削除
-                editor1.clear();
-                editor2.clear();
-                editor1.commit();
-                editor2.commit();
-
-                Toast.makeText(this, "ゲームにかかわる全記録を削除してタイトルへ戻る", Toast.LENGTH_SHORT).show();
-
-                startActivity(intent);
-
+                // アラートダイアログ
+                DialogFragment newFragment = new CustomDialogFragment();
+                newFragment.show(getFragmentManager(), "test");
                 break;
+
+
         }
 
+    }
+
+    @SuppressLint("ValidFragment")
+    public class CustomDialogFragment extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            Dialog dialog = new Dialog(getActivity());
+            // タイトル非表示
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            // フルスクリーン
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+            dialog.setContentView(R.layout.game_dialog_custom);
+            // 背景を透明にする
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            ((TextView)dialog.findViewById(R.id.message)).setText("ゲームの記録を削除します\n本当によろしいですか？");
+
+            // OK ボタンのリスナ
+            dialog.findViewById(R.id.positive_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(intent);
+
+                    //全Preferenceファイルを削除
+                    editor1.clear();
+                    editor2.clear();
+                    editor1.commit();
+                    editor2.commit();
+
+                    startActivity(intent);
+
+                }
+            });
+
+            return dialog;
+        }
     }
 }

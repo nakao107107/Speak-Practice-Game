@@ -89,7 +89,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_state"
+        android:background="@drawable/button_state_green"
         android:textSize="20dp"
         android:text="設定を保存してタイトルにもどる"
         android:id="@+id/home"
@@ -99,7 +99,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_state"
+        android:background="@drawable/button_state_green"
         android:textSize="20dp"
         android:text="ゲームの記録をリセットする"
         android:id="@+id/reset"

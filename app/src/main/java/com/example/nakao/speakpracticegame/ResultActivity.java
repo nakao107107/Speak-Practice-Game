@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 public class ResultActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView RightAnswer,Comment;
+    ImageView star1,star2,star3;
     Intent intent;
     int Result;
     int ProgramNumber;
@@ -36,6 +38,10 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result);
 
+        star1=(ImageView)findViewById(R.id.star1);
+        star2=(ImageView)findViewById(R.id.star2);
+        star3=(ImageView)findViewById(R.id.star3);
+
         intent=getIntent();
         Result=intent.getIntExtra("RightAnswerNumber",0);
         level=intent.getIntExtra("level",1);
@@ -45,9 +51,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         ProgramNumber = data.getInt("mProgramNumber",5 );
 
         Percentage=Result/ProgramNumber;
-
-        RightAnswer=(TextView)findViewById(R.id.result);
-        RightAnswer.setText(Result+"/"+ProgramNumber);
 
         Comment=(TextView)findViewById(R.id.comment);
 
@@ -60,13 +63,10 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         image=(ImageView)findViewById(R.id.judge);
 
 
-
-
-
         if(Percentage==1.0){
             Comment.setText("やったね！パーフェクト！");
             GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
-            Glide.with(this).load(R.drawable.happy).into(target);
+            Glide.with(this).load(R.drawable.tori_happy).into(target);
 
             //Preferenceファイルから現在の最高クリアレベルを取得（設定なしの場合10問）
             SharedPreferences process = getSharedPreferences("Level", Context.MODE_PRIVATE);
@@ -89,11 +89,16 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         }else if(Result>0.6){
             Comment.setText("いいかんじ！つぎはまんてんをめざそう！");
             GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
-            Glide.with(this).load(R.drawable.ordinary).into(target);
+            Glide.with(this).load(R.drawable.tori_ordinary).into(target);
+            star3.setImageResource(R.drawable.star_shadow);
         }else{
+
             Comment.setText("ざんねん…つぎはもっとがんばろう…");
             GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(image);
-            Glide.with(this).load(R.drawable.sad).into(target);
+            Glide.with(this).load(R.drawable.tori_sad).into(target);
+            star3.setImageResource(R.drawable.star_shadow);
+            star2.setImageResource(R.drawable.star_shadow);
+
         }
 
 
@@ -104,11 +109,12 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.goHomeButton:
-                Intent intent1=new Intent(v.getContext(),MainActivity.class);
+                Intent intent1=new Intent(v.getContext(),ModeSelectActivity.class);
                 startActivity(intent1);
                 break;
             case R.id.goGameButton:
-                Intent intent2=new Intent(v.getContext(),StageSelectActivity.class);
+                Intent intent2=new Intent(v.getContext(),GameActivity.class);
+                intent2.putExtra("LEVEL",level);
                 startActivity(intent2);
                 break;
         }

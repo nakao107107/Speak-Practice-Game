@@ -1,18 +1,16 @@
 package com.example.nakao.speakpracticegame;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -20,28 +18,22 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 //comment for git
@@ -51,8 +43,7 @@ public class GameActivity extends AppCompatActivity {
 
     Button mButton;
     TextView mJudgeText,mQuestionText,mTimeText;
-    ImageView mImageView;
-    LinearLayout mGroundView;
+    ImageView mImageView,mGroundView;
 
     String realanswer;
     private String mRightAnsText;
@@ -117,13 +108,15 @@ public class GameActivity extends AppCompatActivity {
         mLiver=intent.getIntExtra("LEVEL",0)-1;
 
         mButton=(Button)findViewById(R.id.button);
-        mJudgeText=(TextView)findViewById(R.id.Judge);
+        mJudgeText=(TextView)findViewById(R.id.judge);
         mQuestionText=(TextView)findViewById(R.id.question);
-        mTimeText=(TextView)findViewById(R.id.Times);
+        mTimeText=(TextView)findViewById(R.id.number);
         mImageView = (ImageView) findViewById(R.id.character);
-        mGroundView = (LinearLayout) findViewById(R.id.background);
+        mGroundView = (ImageView) findViewById(R.id.background);
+
+        //キャラクターgifのセット
         GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
-        Glide.with(this).load(R.drawable.ordinary).into(target);
+        Glide.with(this).load(R.drawable.tori_ordinary).into(target);
 
         mTimes=1;//問題数の初期化
 
@@ -140,7 +133,7 @@ public class GameActivity extends AppCompatActivity {
                 mButton.setText("ゲームちゅう");
 
                 GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(mImageView);
-                Glide.with(getApplicationContext()).load(R.drawable.ordinary).into(target);
+                Glide.with(getApplicationContext()).load(R.drawable.tori_ordinary).into(target);
 
                 if(mTimes==mProgramNumber+1) {
                     Intent intent = new Intent(v.getContext(), ResultActivity.class);
@@ -221,7 +214,7 @@ public class GameActivity extends AppCompatActivity {
                     break;
                 // No recognition result matched
                 case SpeechRecognizer.ERROR_NO_MATCH:
-                    reason = "わからなかったよ　もう１かいやってみて！";
+                    reason = "わからなかったよ\nもう１かいやってみて！";
                     mTimes--;
                     mButton.setText("もう１どチャレンジ");
                     mButton.setEnabled(true);
@@ -237,7 +230,7 @@ public class GameActivity extends AppCompatActivity {
                     break;
                 // No speech input
                 case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                    reason = "わからなかったよ　もう１かいやってみて！";
+                    reason = "わからなかったよ\nもう１かいやってみて！";
                     mTimes--;
                     mButton.setText("もう１どチャレンジ");
                     mButton.setEnabled(true);
@@ -314,12 +307,12 @@ public class GameActivity extends AppCompatActivity {
 
                     if(mRightAnsText.equals(hMatch.zenkakuHiraganaToZenkakuKatakana(s))){
                         sbuilder.append("せいかい");
-                        drawableInt = R.drawable.happy;
+                        drawableInt = R.drawable.tori_happy;
                         mRightAnswerNumber++;
 
                     } else {
                         sbuilder.append("ざんねん「"+ s + "」ときこえたよ");
-                        drawableInt = R.drawable.sad;
+                        drawableInt = R.drawable.tori_sad;
                     }
 
                     String setting_text = sbuilder.toString();
@@ -379,6 +372,49 @@ public class GameActivity extends AppCompatActivity {
         }
 
     }
+
+    // BACKボタンが押された時の処理
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            // アラートダイアログ
+            DialogFragment newFragment = new CustomDialogFragment();
+            newFragment.show(getFragmentManager(), "test");
+            return true;
+        }
+        return false;
+    }
+
+
+    @SuppressLint("ValidFragment")
+        public class CustomDialogFragment extends DialogFragment{
+
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+                Dialog dialog = new Dialog(getActivity());
+                // タイトル非表示
+                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                // フルスクリーン
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+                dialog.setContentView(R.layout.game_dialog_custom);
+                // 背景を透明にする
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                // OK ボタンのリスナ
+                dialog.findViewById(R.id.positive_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(v.getContext(),StageSelectActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    }
+                });
+
+                return dialog;
+            }
+    }
+
 
 
 
