@@ -10,8 +10,7 @@
     <color name="background">#D3EDFB</color>
     <color name="silver">#c0c0c0</color>
     <color name="rose">#ff0037</color>
-    <color name="black_board">#99ff99</color>
-    <color name="black_board_border">#d18047</color>
-    <color name="black_board_border2">#c46c2e</color>
+    <color name="black_board">#8800e676</color>
+    <color name="black_board_border">#00C853</color>
 
 </resources>

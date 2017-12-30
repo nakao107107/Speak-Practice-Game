@@ -19,70 +19,16 @@ import java.util.Map;
  * Created by ryosuke on 17/11/02.
  */
 
-public class DescendAdapter extends BaseAdapter {
-    Context mContext;
-    int[] mArray;
-    LayoutInflater mLayoutInfrater = null;
-    int mLayoutID = 0;
-    Map<String,Integer> mMap = new HashMap<>(50);
-    List<Map.Entry<String, Integer>> mList;
+public class DescendAdapter extends CommonAbstractAdapter {
 
-    private static String GOJUON = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん！?#$";
-
-    static class ViewHolder{
-        TextView moji;
-        TextView number;
-    }
-
-
-
-    public DescendAdapter(Context context, @LayoutRes int id,  int[] i_array) {
-        this.mContext = context;
-        this.mLayoutID = id;
-        this.mArray = i_array;
-        this.mLayoutInfrater = LayoutInflater.from(mContext);
-        fillMap();
+    public DescendAdapter(Context context, int id, int[] i_array) {
+        super(context, id, i_array);
     }
 
     @Override
-    public int getCount() {
-        return mArray.length;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder;
-
-        if(convertView == null){
-            convertView = mLayoutInfrater.inflate(mLayoutID, null);
-            holder = new ViewHolder();
-            holder.moji = (TextView)convertView.findViewById(R.id.moji);
-            holder.number = (TextView)convertView.findViewById(R.id.number);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder)convertView.getTag();
-        }
-
-        holder.moji.setText(String.valueOf(mList.get(position).getKey()));
-        holder.number.setText(String.valueOf(mList.get(position).getValue()));
-
-        return convertView;
-    }
-
-    private void fillMap(){
+    void fillMap(){
         for(int i=0; i<mArray.length; i++){
-            String key = String.valueOf(GOJUON.charAt(i));
+            String key = String.valueOf(Gojuon.getGojuon().charAt(i));
             mMap.put(key, mArray[i]);
         }
         mList = new ArrayList<Map.Entry<String, Integer>>(mMap.entrySet());
