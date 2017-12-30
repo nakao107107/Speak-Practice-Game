@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
+import android.widget.Button;
+
 import java.util.Arrays;
 
 
@@ -14,7 +16,6 @@ import java.util.Arrays;
 
 public class ArrayUtil {
 
-    private static String GOJUON = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
     private static final String SHARED_KEY = "DATABASE";
     public static final String EVALUE_KEY_WORD = "value"; //評価配列ようのキーセット.
 
@@ -49,7 +50,7 @@ public class ArrayUtil {
     public static int[] correctWord(String right_word, String sample_word,@Nullable int[] eval_array) {
         int[] jarray;
         if(eval_array == null){
-            jarray = new int[50];
+            jarray = new int[46];
         } else {
             jarray =  eval_array;
         }
@@ -61,9 +62,9 @@ public class ArrayUtil {
 
         int i=0;
         while (i<r_chars.length && i<s_chars.length){
-            p= GOJUON.indexOf(r_chars[i]) ;
+            p= Gojuon.getGojuon().indexOf(r_chars[i]) ;
             Log.d("TAG",String.valueOf(p));
-            if(p<0 || p>50) {
+            if(p<0 || p>46) {
                 i++;
                 continue;
             }
@@ -117,10 +118,10 @@ public class ArrayUtil {
      * @return
      */
     public static int[] getArray(String key_word,Context context) {
-        String default_string = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,";  //key_wordに対するオブジェクトがない場合に返すもの
+        String default_string = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,";  //key_wordに対するオブジェクトがない場合に返すもの
         SharedPreferences data = context.getSharedPreferences(SHARED_KEY, Context.MODE_PRIVATE);
         String[] predata = data.getString(key_word,default_string).split(",",0); //","ごとに文字を分ける。引数の0は最後の空白を含まないことを意味する。
-        int[] i_array = new int[50];
+        int[] i_array = new int[46];
         for(int i=0; i<i_array.length; i++){
             i_array[i] = Integer.parseInt(predata[i]);
         }

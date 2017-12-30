@@ -28,7 +28,7 @@ public class AscendAdapter extends CommonAbstractAdapter {
     @Override
     void fillMap(){
         for(int i=0; i<mArray.length; i++){
-            String key = String.valueOf(GOJUON.charAt(i));
+            String key = String.valueOf(Gojuon.getGojuon().charAt(i));
             mMap.put(key, mArray[i]);
         }
         mList = new ArrayList<Map.Entry<String, Integer>>(mMap.entrySet());

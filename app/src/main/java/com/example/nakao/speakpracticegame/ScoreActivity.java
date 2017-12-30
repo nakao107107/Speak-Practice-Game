@@ -6,12 +6,14 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ScoreActivity extends AppCompatActivity {
 
-    private BaseAdapter mBaseAdapter = null;
-    private Button mSortButton;
-    private ListView mListView = null;
+    private BaseAdapter baseAdapter = null;
+    private Button sortButton;
+    private TextView scoreTextView;
+    private ListView listView = null;
     private AdapterSwitch adapter_type = AdapterSwitch.Ascend;
     private enum AdapterSwitch{
         Ascend,
@@ -24,23 +26,29 @@ public class ScoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_score);
         final int[] evalue_array = ArrayUtil.getArray(ArrayUtil.EVALUE_KEY_WORD, this.getApplicationContext());
 
-        mSortButton = (Button)findViewById(R.id.sortButton);
+        sortButton = (Button)findViewById(R.id.sortButton);
+        scoreTextView = (TextView)findViewById(R.id.scoreTextView);
 
-        mListView = (ListView)findViewById(R.id.listView);
-        mBaseAdapter = new AscendAdapter(this.getApplicationContext(), R.layout.itemrow, evalue_array);
-        mListView.setAdapter(mBaseAdapter);
+        listView = (ListView)findViewById(R.id.listView);
+        baseAdapter = new AscendAdapter(this.getApplicationContext(), R.layout.itemrow, evalue_array);
+        listView.setAdapter(baseAdapter);
 
-        mSortButton.setOnClickListener(new View.OnClickListener() {
+        sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(adapter_type == AdapterSwitch.Ascend){
+
                     adapter_type = AdapterSwitch.Descend;
-                    mBaseAdapter = new DescendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+                    baseAdapter = new DescendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+                    sortButton.setText("よかったじゅんにする");
+                    scoreTextView.setText("わるかったじゅん");
                 } else if(adapter_type == AdapterSwitch.Descend){
                     adapter_type = AdapterSwitch.Ascend;
-                    mBaseAdapter = new AscendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+                    baseAdapter = new AscendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+                    sortButton.setText("わるかったじゅんにする");
+                    scoreTextView.setText("よかったじゅん");
                 }
-                mListView.setAdapter(mBaseAdapter);
+                listView.setAdapter(baseAdapter);
             }
         });
 
@@ -48,14 +56,14 @@ public class ScoreActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (mBaseAdapter == null){
+        if (baseAdapter == null){
             int[] evalue_array = ArrayUtil.getArray(ArrayUtil.EVALUE_KEY_WORD, this.getApplicationContext());
             if(adapter_type == AdapterSwitch.Ascend){
-                mBaseAdapter = new AscendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+                baseAdapter = new AscendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
             } else if(adapter_type == AdapterSwitch.Descend){
-                mBaseAdapter = new DescendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+                baseAdapter = new DescendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
             }
-            mListView.setAdapter(mBaseAdapter);
+            listView.setAdapter(baseAdapter);
         }
 
     }

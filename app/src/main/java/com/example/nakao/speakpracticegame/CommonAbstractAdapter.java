@@ -23,14 +23,11 @@ public abstract class CommonAbstractAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInfrater = null;
     private int mLayoutID = 0;
 
-    protected Map<String,Integer> mMap = new HashMap<>(50);
+    protected Map<String,Integer> mMap = new HashMap<>(46);
     protected List<Map.Entry<String, Integer>> mList;
-
-    protected static String GOJUON = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん！?#$";
 
     static class ViewHolder{
         TextView moji;
-        TextView number;
     }
 
 
@@ -66,15 +63,13 @@ public abstract class CommonAbstractAdapter extends BaseAdapter {
         if(convertView == null){
             convertView = mLayoutInfrater.inflate(mLayoutID, null);
             holder = new ViewHolder();
-            holder.moji = (TextView)convertView.findViewById(R.id.moji);
-            holder.number = (TextView)convertView.findViewById(R.id.number);
+            holder.moji = (TextView)convertView.findViewById(R.id.score_moji);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        holder.moji.setText(String.valueOf(GOJUON.charAt(position)));
-        holder.number.setText(String.valueOf(mArray[position]));
+        holder.moji.setText(String.valueOf(Gojuon.getGojuon().charAt(position)));
 
         return convertView;
     }
