@@ -17,13 +17,16 @@ import java.util.Map;
  * Created by ryosuke on 17/11/02.
  */
 
-public class CommonAdapter extends BaseAdapter {
-    Context mContext;
-    int[] mArray;
-    LayoutInflater mLayoutInfrater = null;
-    int mLayoutID = 0;
+public abstract class CommonAbstractAdapter extends BaseAdapter {
+    private Context mContext;
+    protected int[] mArray;
+    private LayoutInflater mLayoutInfrater = null;
+    private int mLayoutID = 0;
 
-    private static String GOJUON = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん！?#$";
+    protected Map<String,Integer> mMap = new HashMap<>(50);
+    protected List<Map.Entry<String, Integer>> mList;
+
+    protected static String GOJUON = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん！?#$";
 
     static class ViewHolder{
         TextView moji;
@@ -32,11 +35,12 @@ public class CommonAdapter extends BaseAdapter {
 
 
 
-    public CommonAdapter(Context context, @LayoutRes int id,  int[] i_array) {
+    public CommonAbstractAdapter(Context context, @LayoutRes int id,  int[] i_array) {
         this.mContext = context;
         this.mLayoutID = id;
         this.mArray = i_array;
         this.mLayoutInfrater = LayoutInflater.from(mContext);
+        fillMap();
     }
 
     @Override
@@ -74,6 +78,7 @@ public class CommonAdapter extends BaseAdapter {
 
         return convertView;
     }
+    abstract void fillMap();
 
 
 

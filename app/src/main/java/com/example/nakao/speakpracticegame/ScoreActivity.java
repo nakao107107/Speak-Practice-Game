@@ -9,8 +9,14 @@ import android.widget.ListView;
 
 public class ScoreActivity extends AppCompatActivity {
 
-    BaseAdapter mBaseAdapter = null;
-    Button mSortButton;
+    private BaseAdapter mBaseAdapter = null;
+    private Button mSortButton;
+    private ListView mListView = null;
+    private AdapterSwitch adapter_type = AdapterSwitch.Ascend;
+    private enum AdapterSwitch{
+        Ascend,
+        Descend
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,25 +26,36 @@ public class ScoreActivity extends AppCompatActivity {
 
         mSortButton = (Button)findViewById(R.id.sortButton);
 
-        final ListView listView = (ListView)findViewById(R.id.listView);
+        mListView = (ListView)findViewById(R.id.listView);
         mBaseAdapter = new AscendAdapter(this.getApplicationContext(), R.layout.itemrow, evalue_array);
-        listView.setAdapter(mBaseAdapter);
+        mListView.setAdapter(mBaseAdapter);
 
         mSortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBaseAdapter = new DescendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
-                listView.setAdapter(mBaseAdapter);
+                if(adapter_type == AdapterSwitch.Ascend){
+                    adapter_type = AdapterSwitch.Descend;
+                    mBaseAdapter = new DescendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+                } else if(adapter_type == AdapterSwitch.Descend){
+                    adapter_type = AdapterSwitch.Ascend;
+                    mBaseAdapter = new AscendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+                }
+                mListView.setAdapter(mBaseAdapter);
             }
         });
 
     }
-
     @Override
     protected void onStart() {
         super.onStart();
         if (mBaseAdapter == null){
-
+            int[] evalue_array = ArrayUtil.getArray(ArrayUtil.EVALUE_KEY_WORD, this.getApplicationContext());
+            if(adapter_type == AdapterSwitch.Ascend){
+                mBaseAdapter = new AscendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+            } else if(adapter_type == AdapterSwitch.Descend){
+                mBaseAdapter = new DescendAdapter(getApplicationContext(), R.layout.itemrow, evalue_array);
+            }
+            mListView.setAdapter(mBaseAdapter);
         }
 
     }
